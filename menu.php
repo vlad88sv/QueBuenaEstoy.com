@@ -65,7 +65,7 @@ $r = db::consultar($c);
 while ($f = mysql_fetch_assoc($r))
     $paises[$f['ID_pais']] = $f['pais'];
 
-$c = 'SELECT ID_pais, pais FROM datos_pais WHERE ID_pais IN (SELECT ID_pais FROM cuentas WHERE verificado=1) ORDER BY pais ASC';
+$c = 'SELECT datos_pais.ID_pais, datos_pais.pais FROM cuentas LEFT JOIN datos_pais ON datos_pais.ID_pais = cuentas.ID_pais WHERE cuentas.verificado=1 GROUP BY datos_pais.ID_pais ORDER BY datos_pais.pais ASC;';
 $r = db::consultar($c);
 while ($f = mysql_fetch_assoc($r))
     $paisesConFotos[$f['ID_pais']] = $f['pais'];
