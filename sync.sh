@@ -1,2 +1,2 @@
 #!/bin/bash
-rsync --compress --exclude '*.psd' -av ./  root@vps.mupi.com.sv:/var/www/quebuenaestoy.com/
+rsync --compress --exclude '.git' --exclude '*.psd' -av ./  root@vps.mupi.com.sv:/var/www/quebuenaestoy.com/
