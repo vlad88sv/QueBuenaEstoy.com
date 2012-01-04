@@ -226,7 +226,7 @@ class stubs
 	}
 	$orderBy = 'ORDER BY '.$orderBy;
 	
-	$c = 'SELECT cuentas.ID_cuenta, tf.categoria, tf.creacion, tf.ID_foto, tf.hash AS "foto_hash", (SELECT COUNT(*) FROM fotos AS tf2 WHERE tf2.ID_cuenta = tf.ID_cuenta) AS cantidad_fotos, `pais`, COALESCE(cantidad_votos_a,0) AS cantidad_votos, FORMAT(COALESCE(rating_promedio_a,0),1) AS "rating_promedio", cantidad_vistas, tf.creacion, usuario FROM fotos as tf LEFT JOIN cuentas USING(ID_cuenta) LEFT JOIN (SELECT ID_foto, COUNT(*) AS "cantidad_votos_a", AVG(rating) AS "rating_promedio_a" FROM votos GROUP BY ID_foto) AS tv USING(ID_foto) LEFT JOIN datos_pais USING(ID_pais) WHERE `cuentas`.`tipo` = "perra" '.$where .' '.$orderBy . ' LIMIT '.$offset.',40';
+	$c = 'SELECT cuentas.ID_cuenta, tf.creacion, tf.ID_foto, tf.hash AS "foto_hash", (SELECT COUNT(*) FROM fotos AS tf2 WHERE tf2.ID_cuenta = tf.ID_cuenta) AS cantidad_fotos, `pais`, COALESCE(cantidad_votos_a,0) AS cantidad_votos, FORMAT(COALESCE(rating_promedio_a,0),1) AS "rating_promedio", cantidad_vistas, tf.creacion, usuario FROM fotos as tf LEFT JOIN cuentas USING(ID_cuenta) LEFT JOIN (SELECT ID_foto, COUNT(*) AS "cantidad_votos_a", AVG(rating) AS "rating_promedio_a" FROM votos GROUP BY ID_foto) AS tv USING(ID_foto) LEFT JOIN datos_pais USING(ID_pais) WHERE `cuentas`.`tipo` = "perra" '.$where .' '.$orderBy . ' LIMIT '.$offset.',40';
 
 	/* Nuestro cache principal se basa en la lógica de que para cada $c hay un solo resultado, sin embargo esto no es asi porque los datos
 	  * pueden actualizarse, por lo que no se hace cache de "mias" ni "misfavoritas", ademas de dar un TTL de 1 minuto, la idea es evitar
