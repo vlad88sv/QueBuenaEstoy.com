@@ -11,6 +11,7 @@ if (sesion::iniciado() && isset($_GET['SI']))
 if (isset($_POST['accion']) && $_POST['accion'] == 'registrar')
 {
     // Corroborar primero si no existe la cuenta
+    $errores = array();
         
     if ( db::obtenerPorIndice('cuentas','correo',array($_POST['correo'])) )
     {
