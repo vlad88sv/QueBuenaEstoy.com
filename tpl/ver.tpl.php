@@ -1,5 +1,5 @@
 <?php
-$c = 'SELECT tf.ID_cuenta, tf.ID_foto, tf.hash AS "foto_hash", (SELECT COUNT(*) FROM fotos AS tf2 WHERE tf2.ID_cuenta = tf.ID_cuenta) AS cantidad_fotos, `pais`, cantidad_votos, rating_promedio, cantidad_vistas, tf.creacion, usuario FROM fotos as tf LEFT JOIN cuentas USING(ID_cuenta) LEFT JOIN (SELECT ID_foto, COALESCE(COUNT(*),0) AS "cantidad_votos", COALESCE(AVG(rating),0) AS "rating_promedio" FROM votos) AS tv USING(ID_foto) LEFT JOIN datos_pais USING(ID_pais) WHERE tf.ID_foto="'.db::codex($_GET['ID_foto']).'" AND tf.ID_cuenta="'.db::codex($_GET['ID_cuenta']).'"';
+$c = 'SELECT tf.ID_cuenta, tf.ID_foto, tf.hash AS "foto_hash", (SELECT COUNT(*) FROM fotos AS tf2 WHERE tf2.ID_cuenta = tf.ID_cuenta) AS cantidad_fotos, `pais`, tf.creacion, usuario FROM fotos as tf LEFT JOIN cuentas USING(ID_cuenta) LEFT JOIN datos_pais USING(ID_pais) WHERE tf.ID_foto="'.db::codex($_GET['ID_foto']).'" AND tf.ID_cuenta="'.db::codex($_GET['ID_cuenta']).'"';
 $r = db::consultar($c);
 
 if (!$r || !$f = mysql_fetch_assoc($r))

@@ -42,7 +42,7 @@ if (isset($_GET['quetanbuena']) && isset($_GET['if']) && isset($_GET['ic']))
         $_GET['voto'] = '1';
     }
     
-    $c = 'SELECT cuentas.ID_cuenta, tf.ID_foto, tf.hash AS "foto_hash", (SELECT COUNT(*) FROM fotos AS tf2 WHERE tf2.ID_cuenta = tf.ID_cuenta) AS cantidad_fotos, `pais`, COALESCE(cantidad_votos_a,0) AS cantidad_votos, FORMAT(COALESCE(rating_promedio_a,0),1) AS "rating_promedio", cantidad_vistas, tf.creacion, usuario FROM fotos as tf LEFT JOIN cuentas USING(ID_cuenta) LEFT JOIN (SELECT ID_foto, COUNT(*) AS "cantidad_votos_a", AVG(rating) AS "rating_promedio_a" FROM votos GROUP BY ID_foto) AS tv USING(ID_foto) LEFT JOIN datos_pais USING(ID_pais) WHERE ID_foto="'.db::codex($_GET['if']).'" GROUP BY ID_foto';
+    $c = 'SELECT cuentas.ID_cuenta, tf.ID_foto, tf.hash AS "foto_hash", (SELECT COUNT(*) FROM fotos AS tf2 WHERE tf2.ID_cuenta = tf.ID_cuenta) AS cantidad_fotos, `pais`, COALESCE(cantidad_votos_a,0) AS cantidad_votos, FORMAT(COALESCE(rating_promedio_a,0),1) AS "rating_promedio", cantidad_vistas, tf.creacion, usuario FROM fotos as tf LEFT JOIN cuentas USING(ID_cuenta) LEFT JOIN (SELECT ID_foto, COUNT(*) AS "cantidad_votos_a", AVG(rating) AS "rating_promedio_a" FROM votos WHERE ID_foto="'.db::codex($_GET['if']).'" GROUP BY ID_foto) AS tv USING(ID_foto) LEFT JOIN datos_pais USING(ID_pais) WHERE ID_foto="'.db::codex($_GET['if']).'" GROUP BY ID_foto';
     $r = db::consultar($c);
     if ($r)
         $f = mysql_fetch_assoc($r);
