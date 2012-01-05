@@ -51,6 +51,26 @@ foreach ($menu as $enlace => $datos)
 {
     echo '<li'.($_GET['accion'] == $datos['enlace'] ? ' class="seleccionado"' : '').'><a id="menu_'.$datos['enlace'].'"  title="'._($datos['texto']).'" href="'.PROY_URL.$datos['enlace'].'.html'.@$datos['query'].'">'._($datos['texto']).@$datos['sufijo'].'</a>'.(@$datos['tip'] ? '<span class="menu_tip">'.$datos['tip'].'</span>' : '').'</li>';
 }
+
+if (sesion::info('ID_cuenta') == '1' || sesion::info('falsa') == '1')
+{
+    $c = 'SELECT ID_cuenta, usuario, ID_pais, ID_origen FROM mensajes LEFT JOIN cuentas ON ID_destino=cuentas.ID_cuenta AND ID_destino>1 WHERE cuentas.falsa=1 AND estado="nuevo"';
+    $r = db::consultar($c);
+    
+    while ($f = mysql_fetch_assoc($r))
+    {
+        $perritasCalientes[$f['ID_cuenta']] = $f['usuario'] . ' ['.$f['ID_pais'].']['.$f['ID_origen'].']';
+    }
+    echo '<form style="display:inline;" action="'.PROY_URL.'" method="post">'.ui::combobox('perritasCalientes',ui::array_a_opciones($perritasCalientes)). ' <input type="submit" value="Ver" /></form>';
+    
+    if (isset($_POST['perritasCalientes']))
+    {    
+        sesion::iniciar('ID_cuenta',$_POST['perritasCalientes']);
+        echo '<script>alert("Cambio de cuenta a '.$perritasCalientes[$_POST['perritasCalientes']].'");location.href=location.href;</script>';
+        exit(0);
+    }
+
+}
 ?>
 <div style="float: right;" class="fb-like" data-href="http://www.facebook.com/pages/Quebuenaestoycom/168366446596811" data-send="true" data-layout="button_count" data-width="165" data-show-faces="false" data-font="lucida grande"></div>
 </ul>
