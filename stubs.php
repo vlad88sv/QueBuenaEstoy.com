@@ -232,16 +232,13 @@ class stubs
 	  * pueden actualizarse, por lo que no se hace cache de "mias" ni "misfavoritas", ademas de dar un TTL de 1 minuto, la idea es evitar
 	  * golpear a la BD cada segundo para la misma query (aunque para eso esta el query_cache) y renderizar todo de nuevo (el objetivo real a evitar aquí)
 	*/
-
-	$m = new Memcached();
-	$m->addServer('127.0.0.1', 11211);
     
-	$buffer = $m->get('qbe'.sha1($c));
+	$buffer = cache::obtener('qbe'.sha1($c));
 	
 	if ($buffer)
 	{
 	    echo $buffer;
-	    echo '<!-- MemCached stubs::CrearRejilla() -->';
+	    echo '<!-- Cached stubs::CrearRejilla() -->';
 	    return;
 	}
 	
@@ -293,7 +290,7 @@ class stubs
 	}
 	
 	$contenido = ob_get_clean();
-	$m->set('qbe'.sha1($c), $contenido, strtotime('+1 minute'));
+	cache::guardar('qbe'.sha1($c), $contenido, '+1 minute');
 	
 	echo $contenido;
     }
