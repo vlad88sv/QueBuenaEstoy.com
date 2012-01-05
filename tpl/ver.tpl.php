@@ -73,8 +73,15 @@ if ($rr = db::consultar($c))
         <td style="vertical-align: top;"><?php echo $foto_siguiente; ?></td>
     </tr>
 </table>
-    <div id="quetanbuena"></div>
 
+<table style="width: 720px;margin:auto;">
+<tr>
+<td style="width: 490px;"><div id="quetanbuena"></div></td>
+<td style="width: 220px; text-align: right;">
+    <a href="<?php echo PROY_URL.'conocer_chica_'.$f['ID_cuenta'].'_'.$f['ID_foto'].'_'.$f['usuario'].'.html'; ?>" id="contactar" class="conectar">Contactar</a> <a href="<?php echo PROY_URL.'reportar.html?if='.$f['ID_foto']; ?>"  class="reportar">Reportar</a>
+</td>
+</tr>
+</table>
 </div>
 
 <?php if (!empty($mas_fotos)): ?>
@@ -86,12 +93,21 @@ if ($rr = db::consultar($c))
 </table>
 </div>
 <?php endif; ?>
+
 <div id="comentarios">
 <?php
 if (!sesion::iniciado())
 {
     echo '<p>Registrate o inicia sesión y enterate que estan comentando los demas sobre ella!, es gratis!. <a class="conectar" href="'.PROY_URL.'iniciar.html">Registrarse / Iniciar sesión</a></p>';
 } else {
+    echo '
+    <br />
+    <div class="error_burbuja" style="text-align:center;">
+    <p>Ellas ven tus comentarios pero no pueden responder aquí, si quieres conocerla utiliza el botón "Contactar".</p>
+    <p>Ellas serán notificadas de tu contacto y te contestarán segun tus deseos en el menor tiempo posible.</p>
+    </div>
+    ';
+    
     $c = 'SELECT `ID_comentario`, `ID_cuenta`, `ID_foto`, `comentario`, `hora`, `usuario` FROM `comentario` LEFT JOIN `cuentas` USING (ID_cuenta) WHERE ID_foto='.$f['ID_foto'];
     $rr = db::consultar($c);
     

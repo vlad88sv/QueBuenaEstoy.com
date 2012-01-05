@@ -55,11 +55,8 @@ if (isset($_GET['quetanbuena']) && isset($_GET['if']) && isset($_GET['ic']))
     } else {
         echo '¿Que tan buena esta? <a href="#" title="para nada buena" rel="1" class="nota">1</a> <a href="#" title="peor es nada" rel="2" class="nota">2</a> <a href="#" title="regular" rel="3" class="nota">3</a> <a href="#" title="esta buena" rel="4" class="nota">4</a> <a href="#" title="si esta bien buena!" rel="5" class="nota">5</a>';
     }
-    echo ' <a href="'.PROY_URL.'conocer_chica_'.$f['ID_cuenta'].'_'.$f['ID_foto'].'_'.$f['usuario'].'.html" id="contactar" class="conectar">Contactar</a> <a href="'.PROY_URL.'reportar.html?if='.$f['ID_foto'].'"  class="reportar">Reportar</a>';
-    echo '</p>';
+    echo ' ';
     echo '<div id="ver_datos"><span class="rating">Rating <span class="valorRating">'.$f['rating_promedio'].'/5.0</span> <span class="votos">'.$f['cantidad_votos'].' votos</span> <span class="tiempoPublicacion"></span> <span class="vistas">'.$f['cantidad_vistas'].' vistas</span></div>';
-    
-    echo "<script>$('#contactar').facebox();</script>";
 
     return;
 }
