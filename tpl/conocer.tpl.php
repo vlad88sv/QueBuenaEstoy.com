@@ -1,13 +1,6 @@
 <?php
 /* Procesar login/registro */
 
-if (sesion::iniciado() && isset($_GET['SI']))
-{
-    echo '<p>Válidando sesión...</p>';
-    echo '<script>jQuery(document).trigger("close.facebox");</script>';
-    return;
-}
-
 if (isset($_POST['accion']) && $_POST['accion'] == 'registrar')
 {
     // Corroborar primero si no existe la cuenta
@@ -59,14 +52,15 @@ if (isset($_POST['accion']) && $_POST['accion'] == 'identificar')
     $f = mysql_fetch_assoc($r);
     if ($f['encontrado'] > 0) {
         sesion::iniciar('correo',$_POST['correo']);
+        echo 'OK';
     } else {
-        echo '<p style="color:#F00;">El correo o contraseña es incorrecto.</p>';
+        echo 'ERROR';
     }
     return;
 }
 
 
-if (isset($_POST['SoyHombre']))
+if (sesion::iniciado() && isset($_POST['SoyHombre']))
 {
     $c = 'INSERT INTO credito (creditos, ID_cuenta,desbloqueo) VALUES (-1,'.sesion::info('ID_cuenta').',"'.db::codex($_GET['ID_cuenta']).'")';
     $r = db::consultar($c);
@@ -102,7 +96,7 @@ function OfrecerRegistroLogin()
 <div style="text-align: center;">
 <h1>Ya tengo mi cuenta</h1>
 <p>Válido para inicio de sesión de <span style="color:#00F;">chicos</span> y <span style="color:#F00;">chicas</span></p>
-<form class="ajaxer" action="<?php echo PROY_URL_ACTUAL; ?>" method="post">
+<form id="inicio_sesion" class="ajaxer" action="<?php echo PROY_URL_ACTUAL; ?>" method="post">
 <input type="hidden" name="accion" value="identificar" />
 <table style="width:265px;margin:auto;">
     <tr><td>Correo</td><td><input type="text" name="correo" value="" /></td></tr>
@@ -142,7 +136,21 @@ function OfrecerRegistroLogin()
     $(function(){
         $('form').submit(function(event){
             event.preventDefault();
-            $.post('<?php echo PROY_URL_ACTUAL; ?>',$(this).serialize(),function(){window.location.href="<?php echo PROY_URL.'?fbox='.PROY_URL_ACTUAL; ?>";});
+            $.post('<?php echo PROY_URL_ACTUAL; ?>',
+                $(this).serialize(),
+                 function(data){
+                  if (data == "OK")
+                  {
+                      if (<?php echo (isset($_GET['SI']) ? 1 : 0); ?>) {
+                          window.location.href=window.location.href;
+                      } else {
+                          window.location.href="<?php echo PROY_URL.'?fbox='.PROY_URL_ACTUAL; ?>";
+                      }
+                  } else {
+                      alert("Datos de ingreso incorrectos"); $("#inicio_sesion")[0].reset();
+                  }
+                }
+            );
         });
     });
 </script>
