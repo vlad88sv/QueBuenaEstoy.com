@@ -65,7 +65,7 @@ $r = db::consultar($c);
 while ($f = mysql_fetch_assoc($r))
     $paises[$f['ID_pais']] = $f['pais'];
 
-$c = 'SELECT datos_pais.ID_pais, datos_pais.pais FROM cuentas LEFT JOIN datos_pais ON datos_pais.ID_pais = cuentas.ID_pais WHERE cuentas.verificado=1 GROUP BY datos_pais.ID_pais ORDER BY datos_pais.pais ASC;';
+$c = 'SELECT datos_pais.ID_pais, datos_pais.pais FROM cuentas LEFT JOIN datos_pais ON datos_pais.ID_pais = cuentas.ID_pais WHERE cuentas.verificado=1 AND cuentas.ID_pais <> "" GROUP BY datos_pais.ID_pais ORDER BY datos_pais.pais ASC';
 $r = db::consultar($c);
 while ($f = mysql_fetch_assoc($r))
     $paisesConFotos[$f['ID_pais']] = $f['pais'];
@@ -85,7 +85,7 @@ while ($f = mysql_fetch_assoc($r))
 </div>
 <script>
     $(function(){
-        $('#cambiarPais').click(function(){$('.pais_seleccionado').html('<?php echo ui::combobox('ID_pais',ui::array_a_opciones(array_merge(array('' => 'Cualquier país'),$paisesConFotos)),@$_COOKIE['ID_pais']); ?>');});
+        $('#cambiarPais').click(function(){$('.pais_seleccionado').html('<?php echo ui::combobox('ID_pais',ui::array_a_opciones(array_merge(array('' => 'Todos los paises'),$paisesConFotos)),@$_COOKIE['ID_pais']); ?>');});
         $('span.pais_seleccionado #ID_pais').live('change',function(){$.cookie('ID_pais', $("#ID_pais :selected").val(), { expires: 30, path:  '/'});window.location.href=window.location.href.split("?")[0];});
         $('.ordenarPor').click(function(event){event.preventDefault();$.cookie('ordenarPor', $(this).attr('rel'), { expires: 30, path:  '/'});window.location.href=window.location.href.split("?")[0];});
         $('a.ordenarPor[rel="'+($.cookie('ordenarPor') == null ? "aleatorio" : $.cookie('ordenarPor'))+'"]').addClass("seleccionado");
