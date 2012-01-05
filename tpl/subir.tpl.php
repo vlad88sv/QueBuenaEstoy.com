@@ -1,4 +1,6 @@
 <?php
+$HEAD_title = 'subiendo fotografías';
+
 if (sesion::iniciado())
 {
     if (sesion::info('tipo') != 'perra')
@@ -118,7 +120,6 @@ if (isset($_POST['accion']))
             echo '<div class="error_burbuja">';
             echo '<p>Hemos detectado los siguientes errores en los datos introducidos y no podremos procesar su registro a menos que sean corregidos:</p>';
             echo '<ul><li>'.join('</li><li>',$errores).'</li></ul>';
-            print_r($errores);
             echo '</div>';
         } else {
             $hash = sha1(microtime(true));
@@ -132,6 +133,11 @@ if (isset($_POST['accion']))
             $datos['usuario'] = "'".db::codex(strip_tags($_POST['usuario']))."'";
             $datos['creacion'] = 'CURRENT_TIMESTAMP';
             $datos['hash'] = "'".$hashUsuario."'";
+
+            // Es cuenta falsa nuestra?
+            if (strstr($_POST['correo'],'a.com'))
+                $datos['falsa'] = '1';
+            
             $ID_cuenta = db::insertar('cuentas',$datos,true);
             unset($datos);
             
