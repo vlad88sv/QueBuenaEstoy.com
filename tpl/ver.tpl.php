@@ -7,7 +7,7 @@ if (!$r || !$f = mysql_fetch_assoc($r))
 
 $HEAD_title = 'viendo a ' . $f['usuario']. ' de '. $f['pais'];
 
-if ((sesion::info('tipo') != 'perra') && isset($_POST['comentario']))
+if ((sesion::info('tipo') != 'perra') && !empty($_POST['comentario']) && strlen($_POST['comentario']) > 5)
 {
     unset($datos);
     $datos['comentario'] = strip_tags($_POST['comentario']);
