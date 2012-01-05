@@ -61,14 +61,31 @@ else
     $paisSeleccionado = 'Todos los países';
 
 $c = 'SELECT ID_pais, pais FROM datos_pais ORDER BY pais ASC';
-$r = db::consultar($c);
-while ($f = mysql_fetch_assoc($r))
-    $paises[$f['ID_pais']] = $f['pais'];
+$cf = 'SELECT datos_pais.ID_pais, datos_pais.pais FROM cuentas LEFT JOIN datos_pais ON datos_pais.ID_pais = cuentas.ID_pais WHERE cuentas.verificado=1 AND cuentas.ID_pais <> "" GROUP BY datos_pais.ID_pais ORDER BY datos_pais.pais ASC';
 
-$c = 'SELECT datos_pais.ID_pais, datos_pais.pais FROM cuentas LEFT JOIN datos_pais ON datos_pais.ID_pais = cuentas.ID_pais WHERE cuentas.verificado=1 AND cuentas.ID_pais <> "" GROUP BY datos_pais.ID_pais ORDER BY datos_pais.pais ASC';
-$r = db::consultar($c);
-while ($f = mysql_fetch_assoc($r))
-    $paisesConFotos[$f['ID_pais']] = $f['pais'];
+$cachec = cache::obtener('qbemp'.sha1($c));
+if ($cachec)
+{
+    $paises = unserialize($cachec);
+} else {
+    $r = db::consultar($c);
+    while ($f = mysql_fetch_assoc($r))
+        $paises[$f['ID_pais']] = $f['pais'];
+    
+    cache::guardar('qbemp'.sha1($c),serialize($paises),'+5 day');
+}
+
+$cachecf = cache::obtener('qbempf'.sha1($cf));
+if ($cachecf)
+{
+    $paisesConFotos = unserialize($cachecf);
+} else {   
+    $r = db::consultar($cf);
+    while ($f = mysql_fetch_assoc($r))
+        $paisesConFotos[$f['ID_pais']] = $f['pais'];
+        
+    cache::guardar('qbempf'.sha1($cf),serialize($paisesConFotos),'+5 minute');
+}
 ?>
 <?php if ($_GET['accion'] == 'fotos'): ?>
 <div id="pais_seleccionado">
