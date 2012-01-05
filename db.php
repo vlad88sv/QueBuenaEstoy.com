@@ -15,6 +15,33 @@
  + Mantemiento:  Vladimir Hidalgo
 
 */
+class cache
+{
+ private static $conectado = false;
+ private static $m = null;
+
+ private static function conectar()
+ {
+    if (self::$conectado) return true;
+    self::$m = new Memcached();
+    self::$m->addServer('127.0.0.1', 11211);
+    self::$conectado = true;
+    return true;
+ }
+ 
+ public static function obtener($hash)
+ {
+    self::conectar();
+    return self::$m->get($hash);
+ }
+ 
+ public static function guardar($hash,$contenido,$expiracion)
+ {
+    self::conectar();
+    self::$m->set($hash,$contenido,strtotime($expiracion));
+ }
+ 
+}
 
 class db
 {
