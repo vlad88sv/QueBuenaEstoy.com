@@ -1,11 +1,16 @@
 <?php
+$contenido = cache::obtener('qbever'.sha1(PROY_URL_ACTUAL));
+if ($contenido)
+{
+    $contenido = $contenido."\n<!-- Cached ".PROY_URL_ACTUAL." --!>\n";
+    $f = unserialize(cache::obtener('qbeverf'.sha1(PROY_URL_ACTUAL)));
+} else {
+ob_start();
 $c = 'SELECT tf.ID_cuenta, tf.ID_foto, tf.hash AS "foto_hash", (SELECT COUNT(*) FROM fotos AS tf2 WHERE tf2.ID_cuenta = tf.ID_cuenta) AS cantidad_fotos, `pais`, tf.creacion, usuario FROM fotos as tf LEFT JOIN cuentas USING(ID_cuenta) LEFT JOIN datos_pais USING(ID_pais) WHERE tf.ID_foto="'.db::codex($_GET['ID_foto']).'" AND tf.ID_cuenta="'.db::codex($_GET['ID_cuenta']).'"';
 $r = db::consultar($c);
 
 if (!$r || !$f = mysql_fetch_assoc($r))
     return;
-
-$HEAD_title = 'viendo a ' . $f['usuario']. ' de '. $f['pais'];
 
 if ((sesion::info('tipo') != 'perra') && !empty($_POST['comentario']) && strlen($_POST['comentario']) > 5)
 {
@@ -93,7 +98,14 @@ if ($rr = db::consultar($c))
 </table>
 </div>
 <?php endif; ?>
-
+<?php
+$contenido = ob_get_clean();
+cache::guardar('qbever'.sha1(PROY_URL_ACTUAL),$contenido,'+1 day');
+cache::guardar('qbeverf'.sha1(PROY_URL_ACTUAL),serialize($f),'+1 day');
+}
+echo $contenido;
+$HEAD_title = 'viendo a ' . $f['usuario']. ' de '. $f['pais'];
+?>
 <div id="comentarios">
 <?php
 if (!sesion::iniciado())
