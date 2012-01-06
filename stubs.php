@@ -34,7 +34,7 @@ class stubs
             die('La imagen solicitada excede el límite de este servicio');
     
         $origen = 'pool/img/'.$origen;
-        $destino = 'pool/img/m/'.$destino;
+        $destino = 'pool/img/m/'.$destino.'.jpg';
         
         if (!file_exists($destino))
         {
@@ -68,7 +68,7 @@ class stubs
             die('La imagen solicitada excede el límite de este servicio');
     
         $origen = 'pool/img/'.$origen;
-        $destino = 'pool/img/c/'.$destino;
+        $destino = 'pool/img/c/'.$destino.'.jpg';
         
         if (!file_exists($destino))
         {

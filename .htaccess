@@ -21,13 +21,13 @@ RewriteRule ^conocer_chico_([0-9]+)_.*\.html$ contenido.php?accion=conocer&ID_cu
 RewriteRule ^iniciar.html$ contenido.php?accion=conocer&SI [L,QSA]
 
 RewriteCond %{REQUEST_URI} ^/crop_([0-9]+)_([0-9]+)_([a-za-z0-9]{40}|sinfoto)(\.jpg){0,1}$
-RewriteCond %{DOCUMENT_ROOT}/pool/img/c/%1_%2_%3 -f
-RewriteRule ^crop_([0-9]+)_([0-9]+)_([a-za-z0-9]{40}|sinfoto)(\.jpg){0,1}$ %{DOCUMENT_ROOT}/pool/img/c/$1_$2_$3 [L]
+RewriteCond %{DOCUMENT_ROOT}/pool/img/c/%1_%2_%3\.jpg -f
+RewriteRule ^crop_([0-9]+)_([0-9]+)_([a-za-z0-9]{40}|sinfoto)(\.jpg){0,1}$ %{DOCUMENT_ROOT}/pool/img/c/$1_$2_$3\.jpg [L]
 RewriteRule ^crop_([0-9]+)_([0-9]+)_([a-za-z0-9]{40}|sinfoto)(\.jpg){0,1}$ imagen.php?crop&ancho=$1&alto=$2&hash=$3 [L]
 
 RewriteCond %{REQUEST_URI} ^/imagen_([0-9]+)_([0-9]+)_([a-za-z0-9]{40}|sinfoto)(\.jpg){0,1}$
-RewriteCond %{DOCUMENT_ROOT}/pool/img/m/%1_%2_%3 -f
-RewriteRule ^imagen_([0-9]+)_([0-9]+)_([a-za-z0-9]{40}|sinfoto)(\.jpg){0,1}$ %{DOCUMENT_ROOT}/pool/img/m/$1_$2_$3 [L]
+RewriteCond %{DOCUMENT_ROOT}/pool/img/m/%1_%2_%3\.jpg -f
+RewriteRule ^imagen_([0-9]+)_([0-9]+)_([a-za-z0-9]{40}|sinfoto)(\.jpg){0,1}$ %{DOCUMENT_ROOT}/pool/img/m/$1_$2_$3\.jpg [L]
 RewriteRule ^imagen_([0-9]+)_([0-9]+)_([a-za-z0-9]{40}|sinfoto)(\.jpg){0,1}$ imagen.php?ancho=$1&alto=$2&hash=$3 [L]
 
 RewriteRule ^contenido_(.*).html$ contenido.php?accion=$1 [QSA] [L]
